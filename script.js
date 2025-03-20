@@ -7,6 +7,7 @@ class Game {
         this.tileContainer = document.getElementById('tile-container');
         this.scoreDisplay = document.getElementById('score');
         this.bestDisplay = document.getElementById('best');
+        this.mergedTiles = new Set();
         
         document.addEventListener('keydown', this.handleKeyPress.bind(this));
         this.initializeGame();
@@ -16,6 +17,7 @@ class Game {
         this.grid = Array(4).fill().map(() => Array(4).fill(0));
         this.score = 0;
         this.gameOver = false;
+        this.mergedTiles.clear();
         this.updateScore();
         this.addNewTile();
         this.addNewTile();
@@ -39,6 +41,7 @@ class Game {
 
     renderGrid() {
         this.tileContainer.innerHTML = '';
+        this.mergedTiles.clear();
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 if (this.grid[i][j] !== 0) {
@@ -46,6 +49,14 @@ class Game {
                     tile.className = `tile tile-${this.grid[i][j]}`;
                     tile.textContent = this.grid[i][j];
                     tile.style.transform = `translate(${j * 121.25}px, ${i * 121.25}px)`;
+                    
+                    // Add unique identifier for the tile
+                    tile.dataset.position = `${i}-${j}`;
+                    
+                    if (this.mergedTiles.has(`${i}-${j}`)) {
+                        tile.classList.add('merged');
+                    }
+                    
                     this.tileContainer.appendChild(tile);
                 }
             }
@@ -64,6 +75,7 @@ class Game {
     move(direction) {
         let moved = false;
         const newGrid = Array(4).fill().map(() => Array(4).fill(0));
+        this.mergedTiles.clear();
         
         if (direction === 'left' || direction === 'right') {
             for (let i = 0; i < 4; i++) {
@@ -77,6 +89,11 @@ class Game {
                         this.score += row[j];
                         row.splice(j + 1, 1);
                         moved = true;
+                        
+                        // Mark this position as merged
+                        const pos = direction === 'right' ? 
+                            `${i}-${3-j}` : `${i}-${j}`;
+                        this.mergedTiles.add(pos);
                     }
                 }
 
@@ -103,6 +120,11 @@ class Game {
                         this.score += column[i];
                         column.splice(i + 1, 1);
                         moved = true;
+                        
+                        // Mark this position as merged
+                        const pos = direction === 'down' ? 
+                            `${3-i}-${j}` : `${i}-${j}`;
+                        this.mergedTiles.add(pos);
                     }
                 }
 
@@ -129,7 +151,9 @@ class Game {
             
             if (this.isGameOver()) {
                 this.gameOver = true;
-                alert('Game Over!');
+                setTimeout(() => {
+                    alert('Game Over!');
+                }, 300);
             }
         }
     }

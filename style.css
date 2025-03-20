@@ -5,34 +5,44 @@ html, body {
     color: #776e65;
     font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
     font-size: 18px;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .container {
     width: 500px;
     margin: 0 auto;
     padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
 }
 
 .header {
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .title-container {
     position: relative;
+    height: 60px;
+    margin-bottom: 20px;
 }
 
 .title {
-    font-size: 80px;
+    font-size: 60px;
     font-weight: bold;
     margin: 0;
     display: block;
     float: left;
+    line-height: 60px;
 }
 
 .scores-container {
     float: right;
     text-align: right;
+    display: flex;
+    gap: 5px;
 }
 
 .score-box {
@@ -46,8 +56,8 @@ html, body {
     font-weight: bold;
     border-radius: 3px;
     color: white;
-    margin-left: 5px;
     text-align: center;
+    min-width: 100px;
 }
 
 .score-label {
@@ -71,18 +81,20 @@ html, body {
 
 .subtitle {
     font-size: 18px;
-    margin-top: 100px;
+    margin-top: 60px;
     clear: both;
 }
 
 .above-game {
-    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
 }
 
 .game-intro {
-    float: left;
-    line-height: 42px;
-    margin-bottom: 0;
+    margin: 0;
+    line-height: 1.2;
 }
 
 .new-game-button {
@@ -118,7 +130,6 @@ html, body {
     width: 500px;
     height: 500px;
     box-sizing: border-box;
-    margin-top: 40px;
 }
 
 .grid-container {
@@ -169,8 +180,35 @@ html, body {
     font-weight: bold;
     z-index: 10;
     font-size: 55px;
-    transition: 100ms ease-in-out;
-    transition-property: transform;
+    transition: all 10000ms ease-in-out;
+    animation: tile-appear 200ms ease-in-out;
+}
+
+@keyframes tile-appear {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.tile.merged {
+    animation: tile-merge 200ms ease-in-out;
+}
+
+@keyframes tile-merge {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .tile.tile-2 { background: #eee4da; }
@@ -186,11 +224,12 @@ html, body {
 .tile.tile-2048 { color: #f9f6f2; background: #edc22e; font-size: 35px; }
 
 .game-explanation {
-    margin-top: 50px;
+    margin-top: 20px;
+    font-size: 16px;
 }
 
 .signature {
-    margin-top: 30px;
+    margin-top: 10px;
     text-align: center;
     font-size: 14px;
     color: #776e65;
